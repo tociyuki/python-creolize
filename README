@@ -1,0 +1,22 @@
+python-creolize version 1.0
+============================
+
+Python module to convert WikiCreole1.0 text to XHTML.
+
+INSTALLATION
+
+To install this module type the following:
+
+   python setup.py install
+
+DEPENDENCIES
+
+This module requires no other modules and libraries.
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2011 MIZUTANI Tociyuki
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2.

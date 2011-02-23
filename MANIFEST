@@ -1,0 +1,6 @@
+MANIFEST
+README
+setup.py
+creolize.py
+tests/__init__.py
+tests/test_creole10.py
