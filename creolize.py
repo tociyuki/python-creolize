@@ -271,7 +271,7 @@ TOKEN_STATE = {
     ],
 }
 
-class Creolize():
+class Creolize:
 
 
     def __init__(self):
@@ -392,6 +392,7 @@ class Creolize():
         self.result += self.blank + MARKUP[mark][kind]
         self.blank = ''
         self.prev_wtype = WTYPE_ETAG if kind == 'etag' else WTYPE_STAG
+
     def put(self, data):
         self.result += self.blank + self.escape_text(data)
         self.blank = ''
@@ -408,18 +409,17 @@ class Creolize():
         self.result += self.blank + data
         self.blank = ''
         self.prev_wtype = WTYPE_TEXT
+        return self
 
     def puts(self, data):
         self.blank = ''
         if data == '':
             self.result += '\n'
             self.prev_wtype = WTYPE_NULL
-            return self
-        c = 0
-        if len(self.result) > 0:
+        elif self.prev_wtype == WTYPE_TEXT:
             c = ord(self.result[-1])
-        if self.prev_wtype == WTYPE_TEXT and c >= 0x21 and c <= 0x7e:
-            self.blank = ' '
+            if c >= 0x21 and c <= 0x7e:
+                self.blank = ' '
         elif self.prev_wtype == WTYPE_ETAG:
             self.blank = ' '
         return self
@@ -481,9 +481,9 @@ class Creolize():
         self._end_block('p')
 
     def _start_heading(self, data):
-        self.heading = data
+        self.heading = data[0:6]
         self.heading_pos = len(self.result)
-        self._start_block(data)
+        self._start_block(self.heading)
 
     def _end_heading(self, data):
         """ '= heading =\n' """
@@ -492,15 +492,15 @@ class Creolize():
         self.heading = None
         if not self.toc:
             return
-        p = self.result.find('<h', self.heading_pos)
-        if p < 0:
+        i = self.result.find('<h', self.heading_pos) + 3
+        if i < 3:
             return
         text = self.result[self.heading_pos:].rstrip('\n')
         text = re.sub(r'<.*?>', '', text)
         if len(text) == 0:
             return
         hid = 'h' + self.hash_base36(text)
-        self.result = self.result[:p+3] + ' id="' + hid + '"' + self.result[p+3:]
+        self.result = self.result[:i] + ' id="' + hid + '"' + self.result[i:]
         self.tocinfo.append([len(mark), hid, text])
 
     def _list_toc(self):
@@ -777,6 +777,6 @@ class Creolize():
     def _insert_placeholder(self, data):
         """ '<<< placeholder >>>' """
         self._put_markup('<<<', 'stag')
-        self.put_xml(data.strip)
+        self.put_xml(data.strip(' \r\n'))
         self._put_markup('<<<', 'etag')
 

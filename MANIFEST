@@ -1,6 +1,15 @@
 MANIFEST
 README
-setup.py
 creolize.py
+setup.py
+test.py
 tests/__init__.py
-tests/test_creole10.py
+tests/test_10_creole.py
+tests/test_11_burnett.py
+tests/test_12_listadditions.py
+tests/test_13_larsch.py
+tests/test_20_heading.py
+tests/test_21_pholder.py
+tests/test_22_plugin.py
+tests/test_23_toc.py
+tests/test_30_django.py
