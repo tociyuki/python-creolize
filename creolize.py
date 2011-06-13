@@ -273,7 +273,6 @@ TOKEN_STATE = {
 
 class Creolize:
 
-
     def __init__(self):
         self.type = 'xhtml'
         self.script_name = 'http://example.net/wiki/'
@@ -524,15 +523,11 @@ class Creolize:
     def _insert_indent(self, data):
         data = data.replace(' ', '')
         level = len(data)
-        while self.indent > level:
-            self._put_markup('>', 'etag')
-            self.indent -= 1
-        if self.indent < level:
-            while self.indent < level:
-                self._put_markup('>', 'stag')
-                self.indent += 1
-        else:
-            self.indent = level
+        step = level - self.indent
+        tag_kind = 'stag' if step > 0 else 'etag'
+        for x in range(abs(step)):
+            self._put_markup('>', tag_kind)
+        self.indent = level
 
     def _end_indent(self, data):
         self._insert_indent('')
